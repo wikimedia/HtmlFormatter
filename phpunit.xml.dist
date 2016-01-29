@@ -1,0 +1,16 @@
+<phpunit
+	bootstrap="./vendor/autoload.php"
+	colors="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	beStrictAboutOutputDuringTests="true">
+	<testsuites>
+		<testsuite name="HtmlFormatter tests">
+			<directory>./tests</directory>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./src</directory>
+		</whitelist>
+	</filter>
+</phpunit>

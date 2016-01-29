@@ -1,0 +1,32 @@
+{
+	"name": "wikimedia/html-formatter",
+	"description": "Performs transformations of HTML by wrapping around libxml2 and working around its countless bugs.",
+	"license": "GPL-2.0+",
+	"homepage": "https://www.mediawiki.org/wiki/HtmlFormatter",
+	"authors": [
+		{
+			"name": "MediaWiki contributors"
+		}
+	],
+	"autoload": {
+		"classmap": [
+			"src/"
+		]
+	},
+	"require": {
+		"php": ">=5.5",
+		"ext-intl": "*"
+	},
+	"require-dev": {
+		"jakub-onderka/php-parallel-lint": "0.9.2",
+		"phpunit/phpunit": "4.7.2",
+		"mediawiki/mediawiki-codesniffer": "0.5.1"
+	},
+	"scripts": {
+		"test": [
+			"parallel-lint . --exclude vendor",
+			"phpunit",
+			"phpcs -p"
+		]
+	}
+}
