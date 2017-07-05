@@ -39,7 +39,8 @@ class HtmlFormatterTest extends \PHPUnit_Framework_TestCase {
 
 	private static function normalize( $s ) {
 		return str_replace( "\n", '',
-			str_replace( "\r", '', $s ) // "yay" to Windows!
+			// "yay" to Windows!
+			str_replace( "\r", '', $s )
 		);
 	}
 
@@ -102,7 +103,8 @@ class HtmlFormatterTest extends \PHPUnit_Framework_TestCase {
 				'<span title="&quot; \' &amp;">&lt;Тест!&gt;</span> &amp;&lt;&#38;&#0038;&#x26;&#x026;',
 				'<span title="&quot; \' &amp;">&lt;Тест!&gt;</span> &amp;&lt;&amp;&amp;&amp;&amp;',
 				[],
-				$removeTags, // Have some rules to trigger a DOM parse
+				// Have some rules to trigger a DOM parse
+				$removeTags,
 			],
 			// https://phabricator.wikimedia.org/T55086
 			[
