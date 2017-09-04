@@ -122,12 +122,3 @@ class HtmlFormatterTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse( $f->hasDoc, 'HtmlFormatter should not needlessly parse HTML' );
 	}
 }
-
-class MockHtmlFormatter extends HtmlFormatter {
-	public $hasDoc = false;
-
-	public function getDoc() {
-		$this->hasDoc = true;
-		return parent::getDoc();
-	}
-}
