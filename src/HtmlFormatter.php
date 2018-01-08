@@ -244,13 +244,9 @@ class HtmlFormatter {
 		];
 		$html = strtr( $html, $replacements );
 
-		if ( \function_exists( 'mb_convert_encoding' ) ) {
-			// Just in case the conversion in getDoc() above used named
-			// entities that aren't known to html_entity_decode().
-			$html = \mb_convert_encoding( $html, 'UTF-8', 'HTML-ENTITIES' );
-		} else {
-			$html = \html_entity_decode( $html, ENT_COMPAT, 'utf-8' );
-		}
+		// Just in case the conversion in getDoc() above used named
+		// entities that aren't known to html_entity_decode().
+		$html = \mb_convert_encoding( $html, 'UTF-8', 'HTML-ENTITIES' );
 		return $html;
 	}
 
