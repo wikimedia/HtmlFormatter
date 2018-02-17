@@ -6,8 +6,9 @@ use HtmlFormatter\HtmlFormatter;
 
 /**
  * @group HtmlFormatter
+ * @covers \HtmlFormatter\HtmlFormatter
  */
-class HtmlFormatterTest extends \PHPUnit_Framework_TestCase {
+class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider getHtmlData
