@@ -1,7 +1,7 @@
 {
 	"name": "wikimedia/html-formatter",
 	"description": "Performs transformations of HTML by wrapping around libxml2 and working around its countless bugs.",
-	"license": "GPL-2.0+",
+	"license": "GPL-2.0-or-later",
 	"homepage": "https://www.mediawiki.org/wiki/HtmlFormatter",
 	"authors": [
 		{
