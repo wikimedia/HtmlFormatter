@@ -38,6 +38,15 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( asort( $expectedRemoved ), asort( $removed ) );
 	}
 
+	/**
+	 * @expectedException \Exception
+	 */
+	public function testInvalidSelectorsThrow() {
+		$f = new HtmlFormatter( '' );
+		$f->remove( 'foo[bar]' );
+		$f->filterContent();
+	}
+
 	private static function normalize( $s ) {
 		return str_replace( "\n", '',
 			// "yay" to Windows!
