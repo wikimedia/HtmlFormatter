@@ -117,9 +117,17 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
+	/**
+	 * Verifies that HtmlFormatter does not needlessly parse HTML
+	 */
 	public function testQuickProcessing() {
-		$f = new MockHtmlFormatter( 'foo' );
+		$f = $this->getMockBuilder( HtmlFormatter::class )
+			->setMethods( [ 'getDoc' ] )
+			->setConstructorArgs( [ 'foo' ] )
+			->getMock();
+		$f->expects( self::never() )
+			->method( 'getDoc' );
+		/** @var HtmlFormatter $f */
 		$f->filterContent();
-		$this->assertFalse( $f->hasDoc, 'HtmlFormatter should not needlessly parse HTML' );
 	}
 }
