@@ -38,12 +38,10 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( asort( $expectedRemoved ), asort( $removed ) );
 	}
 
-	/**
-	 * @expectedException \Exception
-	 */
 	public function testInvalidSelectorsThrow() {
 		$f = new HtmlFormatter( '' );
 		$f->remove( 'foo[bar]' );
+		$this->expectException( \Exception::class );
 		$f->filterContent();
 	}
 
