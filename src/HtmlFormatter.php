@@ -305,7 +305,7 @@ class HtmlFormatter {
 
 		if ( $this->elementsToFlatten ) {
 			$elements = \implode( '|', $this->elementsToFlatten );
-			$html = \preg_replace( "#</?($elements)\\b[^>]*>#is", '', $html );
+			$html = \preg_replace( "#</?(?:$elements)\\b[^>]*>#is", '', $html );
 		}
 
 		return $html;
@@ -323,13 +323,14 @@ class HtmlFormatter {
 	 * @throws \Exception
 	 */
 	protected function parseSelector( $selector, &$type, &$rawName ) {
-		if ( strpos( $selector, '.' ) === 0 ) {
+		$firstChar = substr( $selector, 0, 1 );
+		if ( $firstChar === '.' ) {
 			$type = 'CLASS';
 			$rawName = substr( $selector, 1 );
-		} elseif ( strpos( $selector, '#' ) === 0 ) {
+		} elseif ( $firstChar === '#' ) {
 			$type = 'ID';
 			$rawName = substr( $selector, 1 );
-		} elseif ( strpos( $selector, '.' ) !== 0 && strpos( $selector, '.' ) !== false ) {
+		} elseif ( strpos( $selector, '.' ) > 0 ) {
 			$type = 'TAG_CLASS';
 			$rawName = $selector;
 		} elseif ( strpos( $selector, '[' ) === false && strpos( $selector, ']' ) === false ) {
