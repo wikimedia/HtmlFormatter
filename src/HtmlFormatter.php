@@ -29,14 +29,27 @@ class HtmlFormatter {
 	 */
 	private $doc;
 
+	/**
+	 * @var string
+	 */
 	private $html;
+
+	/**
+	 * @var string[]
+	 */
 	private $itemsToRemove = [];
+
+	/**
+	 * @var string[]
+	 */
 	private $elementsToFlatten = [];
+
+	/**
+	 * @var bool
+	 */
 	protected $removeMedia = false;
 
 	/**
-	 * Constructor
-	 *
 	 * @param string $html Text to process
 	 */
 	public function __construct( $html ) {
@@ -103,7 +116,7 @@ class HtmlFormatter {
 	 *   .<class>
 	 *   #<id>
 	 *
-	 * @param array|string $selectors Selector(s) of stuff to remove
+	 * @param string[]|string $selectors Selector(s) of stuff to remove
 	 */
 	public function remove( $selectors ) {
 		$this->itemsToRemove = array_merge( $this->itemsToRemove, (array)$selectors );
@@ -116,7 +129,7 @@ class HtmlFormatter {
 	 * Note this interface may fail in surprising unexpected ways due to usage of regexes,
 	 * so should not be relied on for HTML markup security measures.
 	 *
-	 * @param array|string $elements Name(s) of tag(s) to flatten
+	 * @param string[]|string $elements Name(s) of tag(s) to flatten
 	 */
 	public function flatten( $elements ) {
 		$this->elementsToFlatten = array_merge( $this->elementsToFlatten, (array)$elements );
@@ -132,7 +145,7 @@ class HtmlFormatter {
 	/**
 	 * Removes content we've chosen to remove.  The text of the removed elements can be
 	 * extracted with the getText method.
-	 * @return array Array of removed DOMElements
+	 * @return \DOMElement[] Array of removed DOMElements
 	 */
 	public function filterContent() {
 		$removals = $this->parseItemsToRemove();
@@ -207,8 +220,8 @@ class HtmlFormatter {
 
 	/**
 	 * Removes a list of elelments from DOMDocument
-	 * @param array|\DOMNodeList $elements
-	 * @return array Array of removed elements
+	 * @param \DOMElement[]|\DOMNodeList $elements
+	 * @return \DOMElement[] Array of removed elements
 	 */
 	private function removeElements( $elements ) {
 		$list = $elements;
