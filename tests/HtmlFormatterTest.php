@@ -102,8 +102,7 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 			// selector ".foo" should not match ".no-foo" or ".foo-bar" (T231160)
 			[
 				'<div class="no-foo">A</div><div class="foo-bar">B</div><div class="foo foo-bar">C</div>',
-				'',
-				// FIXME: '<div class="no-foo">A</div><div class="foo-bar">B</div>',
+				'<div class="no-foo">A</div><div class="foo-bar">B</div>',
 				[],
 				$removeTags,
 			],

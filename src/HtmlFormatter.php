@@ -193,7 +193,9 @@ class HtmlFormatter {
 		$domElemsToRemove = [];
 		$xpath = new \DOMXPath( $doc );
 		foreach ( $removals['CLASS'] as $classToRemove ) {
-			$elements = $xpath->query( '//*[contains(@class, "' . $classToRemove . '")]' );
+			// Use spaces to avoid matching for unrelated classnames (T231160)
+			// https://stackoverflow.com/a/1604480/319266
+			$elements = $xpath->query( '//*[contains(concat(" ", @class, " "), " ' . $classToRemove . ' ")]' );
 
 			/** @var $element \DOMElement */
 			foreach ( $elements as $element ) {
