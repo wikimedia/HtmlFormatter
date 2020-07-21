@@ -92,6 +92,21 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 				],
 				$removeTags,
 			],
+			// selector ".foo" should not match ".telefoon" or ".nofoo"
+			[
+				'<div class="telefoon">A</div><div class="nofoo">B</div><div class="foo">C</div>',
+				'<div class="telefoon">A</div><div class="nofoo">B</div>',
+				[],
+				$removeTags,
+			],
+			// selector ".foo" should not match ".no-foo" or ".foo-bar" (T231160)
+			[
+				'<div class="no-foo">A</div><div class="foo-bar">B</div><div class="foo foo-bar">C</div>',
+				'',
+				// FIXME: '<div class="no-foo">A</div><div class="foo-bar">B</div>',
+				[],
+				$removeTags,
+			],
 			// don't flatten tags that start like chosen ones
 			[
 				'<div><s>foo</s> <span>bar</span></div>',
