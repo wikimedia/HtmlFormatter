@@ -45,6 +45,11 @@ class HtmlFormatter {
 	private $elementsToFlatten = [];
 
 	/**
+	 * Whether a libxml_disable_entity_loader() call is needed
+	 */
+	private const DISABLE_LOADER = LIBXML_VERSION < 20900;
+
+	/**
 	 * @var bool
 	 */
 	protected $removeMedia = false;
@@ -88,11 +93,15 @@ class HtmlFormatter {
 			$html = str_replace( ' <', '&#32;<', $html );
 
 			\libxml_use_internal_errors( true );
-			$loader = \libxml_disable_entity_loader();
+			if ( self::DISABLE_LOADER ) {
+				$loader = \libxml_disable_entity_loader();
+			}
 			$this->doc = new \DOMDocument();
 			$this->doc->strictErrorChecking = false;
 			$this->doc->loadHTML( $html );
-			\libxml_disable_entity_loader( $loader );
+			if ( self::DISABLE_LOADER ) {
+				\libxml_disable_entity_loader( $loader );
+			}
 			\libxml_use_internal_errors( false );
 			$this->doc->encoding = 'UTF-8';
 		}
