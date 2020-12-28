@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+Added PHP 8 support.
+
 ## 2.0.0
 
 The library now requires PHP 7.2 or later.
