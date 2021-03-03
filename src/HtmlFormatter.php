@@ -55,6 +55,11 @@ class HtmlFormatter {
 	protected $removeMedia = false;
 
 	/**
+	 * @var bool
+	 */
+	protected $removeComments = false;
+
+	/**
 	 * @param string $html Text to process
 	 */
 	public function __construct( $html ) {
@@ -109,6 +114,14 @@ class HtmlFormatter {
 	}
 
 	/**
+	 * Sets whether comments should be removed from output
+	 * @param bool $flag Whether to remove or not
+	 */
+	public function setRemoveComments( $flag = true ) {
+		$this->removeComments = $flag;
+	}
+
+	/**
 	 * Sets whether images/videos/sounds should be removed from output
 	 * @param bool $flag Whether to remove or not
 	 */
@@ -145,10 +158,11 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * Instructs the formatter to flatten all tags
+	 * Instructs the formatter to flatten all tags, and remove comments
 	 */
 	public function flattenAllTags() {
 		$this->flatten( '[?!]?[a-z0-9]+' );
+		$this->setRemoveComments( true );
 	}
 
 	/**
@@ -311,12 +325,15 @@ class HtmlFormatter {
 			$html = $this->html;
 		}
 		// Remove stuff added by wrapHTML()
-		$html = \preg_replace( '/<!--.*?-->|^.*?<body>|<\/body>.*$/s', '', $html );
+		$html = \preg_replace( '/^.*?<body>|<\/body>.*$/s', '', $html );
 		$html = $this->onHtmlReady( $html );
 
 		if ( $this->elementsToFlatten ) {
 			$elements = \implode( '|', $this->elementsToFlatten );
 			$html = \preg_replace( "#</?(?:$elements)\\b[^>]*>#is", '', $html );
+			if ( $this->removeComments ) {
+				$html = \preg_replace( "/<!--.*?-->/s", '', $html );
+			}
 		}
 
 		return $html;

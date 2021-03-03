@@ -101,14 +101,14 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 			$removeTags,
 		];
 		yield 'do not flatten tags that start like chosen ones' => [
-			'<div><s>foo</s> <span>bar</span></div>',
-			'foo <span>bar</span>',
+			'<div><s>foo</s> <span>bar</span> <!-- comment --></div>',
+			'foo <span>bar</span> <!-- comment -->',
 			[],
 			$flattenSomeStuff,
 		];
 		yield 'total flattening' => [
-			'<div style="foo">bar<sup>2</sup></div>',
-			'bar2',
+			'<div style="foo">bar<sup>2</sup><!-- comment -->foo<!-- comment --></div>',
+			'bar2foo',
 			[],
 			$flattenEverything,
 		];
