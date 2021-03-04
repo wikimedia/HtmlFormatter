@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0
+
+Changed:
+* Don't strip comments from HTML by default. Comments are still
+  removed when `flattenAllTags` is called. Comments can also be
+  removed by using `setRemoveComments`.
+
 ## 2.0.1
 
 Added PHP 8 support.
