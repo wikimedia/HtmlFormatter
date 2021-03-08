@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1
+
+Fixed
+* Made comment stripping independent of tag flattening.
+
 ## 3.0.0
 
 Changed:
