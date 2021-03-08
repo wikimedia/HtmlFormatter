@@ -328,12 +328,12 @@ class HtmlFormatter {
 		$html = \preg_replace( '/^.*?<body>|<\/body>.*$/s', '', $html );
 		$html = $this->onHtmlReady( $html );
 
+		if ( $this->removeComments ) {
+			$html = \preg_replace( "/<!--.*?-->/s", '', $html );
+		}
 		if ( $this->elementsToFlatten ) {
 			$elements = \implode( '|', $this->elementsToFlatten );
 			$html = \preg_replace( "#</?(?:$elements)\\b[^>]*>#is", '', $html );
-			if ( $this->removeComments ) {
-				$html = \preg_replace( "/<!--.*?-->/s", '', $html );
-			}
 		}
 
 		return $html;

@@ -64,6 +64,9 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 		$flattenEverything = function ( HtmlFormatter $f ) {
 			$f->flattenAllTags();
 		};
+		$removeComments = function ( HtmlFormatter $f ) {
+			$f->setRemoveComments( true );
+		};
 		yield 'remove images' => [
 			'<img src="/foo/bar.jpg" alt="Blah"/>',
 			'',
@@ -125,6 +128,12 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 				. ' <a href="/wiki/Bar" title="Bar" class="mw-redirect">Bar</a>',
 			'Foo<sup id="cite_ref-1" class="reference"><a href="#cite_note-1">[1]</a></sup>'
 				. ' <a href="/wiki/Bar" title="Bar" class="mw-redirect">Bar</a>',
+		];
+		yield 'removeComments only' => [
+			'Foo<!--bar--><i>baz</i>',
+			'Foo<i>baz</i>',
+			[],
+			$removeComments,
 		];
 	}
 
