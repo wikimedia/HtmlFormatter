@@ -74,11 +74,11 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 			$removeImages,
 		];
 		yield 'basic tag removal' => [
-			// @codingStandardsIgnoreStart Ignore long line warnings.
+			// phpcs:disable Generic.Files.LineLength
 			'<table><tr><td>foo</td></tr></table><div class="foo">foo</div><div class="foo quux">foo</div><span id="bar">bar</span>
 <strong class="foo" id="bar">foobar</strong><div class="notfoo">test</div><div class="baz"/>
 <span class="baz">baz</span>',
-			// @codingStandardsIgnoreEnd
+			// phpcs:enable
 			'<div class="notfoo">test</div>
 <span class="baz">baz</span>',
 			[
