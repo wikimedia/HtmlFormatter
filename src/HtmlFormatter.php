@@ -175,7 +175,7 @@ class HtmlFormatter {
 
 		// Bail out early if nothing to do
 		if ( \array_reduce( $removals,
-			function ( $carry, $item ) {
+			static function ( $carry, $item ) {
 				return $carry && !$item;
 			},
 			true

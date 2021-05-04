@@ -52,19 +52,19 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public static function provideHtmlData() {
-		$removeImages = function ( HtmlFormatter $f ) {
+		$removeImages = static function ( HtmlFormatter $f ) {
 			$f->setRemoveMedia();
 		};
-		$removeTags = function ( HtmlFormatter $f ) {
+		$removeTags = static function ( HtmlFormatter $f ) {
 			$f->remove( [ 'table', '.foo', '#bar', 'div.baz' ] );
 		};
-		$flattenSomeStuff = function ( HtmlFormatter $f ) {
+		$flattenSomeStuff = static function ( HtmlFormatter $f ) {
 			$f->flatten( [ 's', 'div' ] );
 		};
-		$flattenEverything = function ( HtmlFormatter $f ) {
+		$flattenEverything = static function ( HtmlFormatter $f ) {
 			$f->flattenAllTags();
 		};
-		$removeComments = function ( HtmlFormatter $f ) {
+		$removeComments = static function ( HtmlFormatter $f ) {
 			$f->setRemoveComments( true );
 		};
 		yield 'remove images' => [
@@ -142,7 +142,7 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testQuickProcessing() {
 		$f = $this->getMockBuilder( HtmlFormatter::class )
-			->setMethods( [ 'getDoc' ] )
+			->onlyMethods( [ 'getDoc' ] )
 			->setConstructorArgs( [ 'foo' ] )
 			->getMock();
 		$f->expects( self::never() )
