@@ -98,6 +98,7 @@ class HtmlFormatter {
 			$html = str_replace( ' <', '&#32;<', $html );
 
 			\libxml_use_internal_errors( true );
+			$loader = false;
 			if ( self::DISABLE_LOADER ) {
 				$loader = \libxml_disable_entity_loader();
 			}
