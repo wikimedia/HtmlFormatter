@@ -23,9 +23,14 @@
 
 namespace HtmlFormatter;
 
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
+use Exception;
+
 class HtmlFormatter {
 	/**
-	 * @var \DOMDocument
+	 * @var DOMDocument
 	 */
 	private $doc;
 
@@ -85,7 +90,7 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * @return \DOMDocument DOM to manipulate
+	 * @return DOMDocument DOM to manipulate
 	 */
 	public function getDoc() {
 		if ( !$this->doc ) {
@@ -102,7 +107,7 @@ class HtmlFormatter {
 			if ( self::DISABLE_LOADER ) {
 				$loader = \libxml_disable_entity_loader();
 			}
-			$this->doc = new \DOMDocument();
+			$this->doc = new DOMDocument();
 			$this->doc->strictErrorChecking = false;
 			$this->doc->loadHTML( $html );
 			if ( self::DISABLE_LOADER ) {
@@ -169,7 +174,7 @@ class HtmlFormatter {
 	/**
 	 * Removes content we've chosen to remove.  The text of the removed elements can be
 	 * extracted with the getText method.
-	 * @return \DOMElement[] Array of removed DOMElements
+	 * @return DOMElement[] Array of removed DOMElements
 	 */
 	public function filterContent() {
 		$removals = $this->parseItemsToRemove();
@@ -215,13 +220,13 @@ class HtmlFormatter {
 
 		// CSS Classes
 		$domElemsToRemove = [];
-		$xpath = new \DOMXPath( $doc );
+		$xpath = new DOMXPath( $doc );
 		foreach ( $removals['CLASS'] as $classToRemove ) {
 			// Use spaces to avoid matching for unrelated classnames (T231160)
 			// https://stackoverflow.com/a/1604480/319266
 			$elements = $xpath->query( '//*[contains(concat(" ", @class, " "), " ' . $classToRemove . ' ")]' );
 
-			/** @var $element \DOMElement */
+			/** @var $element DOMElement */
 			foreach ( $elements as $element ) {
 				$classes = $element->getAttribute( 'class' );
 				if ( \preg_match( "/\b$classToRemove\b/", $classes ) && $element->parentNode ) {
@@ -245,9 +250,9 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * Removes a list of elelments from DOMDocument
-	 * @param \DOMElement[]|\DOMNodeList $elements
-	 * @return \DOMElement[] Array of removed elements
+	 * Removes a list of elements from DOMDocument
+	 * @param DOMElement[]|\DOMNodeList $elements
+	 * @return DOMElement[] Array of removed elements
 	 */
 	private function removeElements( $elements ) {
 		$list = $elements;
@@ -257,7 +262,7 @@ class HtmlFormatter {
 				$list[] = $element;
 			}
 		}
-		/** @var $element \DOMElement */
+		/** @var $element DOMElement */
 		foreach ( $list as $element ) {
 			if ( $element->parentNode ) {
 				$element->parentNode->removeChild( $element );
@@ -285,8 +290,7 @@ class HtmlFormatter {
 
 		// Just in case the conversion in getDoc() above used named
 		// entities that aren't known to html_entity_decode().
-		$html = \mb_convert_encoding( $html, 'UTF-8', 'HTML-ENTITIES' );
-		return $html;
+		return \mb_convert_encoding( $html, 'UTF-8', 'HTML-ENTITIES' );
 	}
 
 	/**
@@ -295,13 +299,13 @@ class HtmlFormatter {
 	 * specify the $element in the method it'll change the underlying dom and you won't be able to get
 	 * it back.
 	 *
-	 * @param \DOMElement|string|null $element ID of element to get HTML from or
+	 * @param DOMElement|string|null $element ID of element to get HTML from or
 	 *   false to get it from the whole tree
 	 * @return string Processed HTML
 	 */
 	public function getText( $element = null ) {
 		if ( $this->doc ) {
-			if ( $element !== null && !( $element instanceof \DOMElement ) ) {
+			if ( $element !== null && !( $element instanceof DOMElement ) ) {
 				$element = $this->doc->getElementById( $element );
 			}
 			if ( $element ) {
@@ -319,7 +323,7 @@ class HtmlFormatter {
 
 			$html = $this->fixLibXml( $html );
 			if ( PHP_EOL === "\r\n" ) {
-				// Cleanup for CRLF misprocessing of unknown origin on Windows.
+				// Cleanup for CRLF mis-processing of unknown origin on Windows.
 				$html = str_replace( '&#13;', '', $html );
 			}
 		} else {
@@ -349,7 +353,7 @@ class HtmlFormatter {
 	 * @param string &$type The type of selector (ID, CLASS, TAG_CLASS, or TAG)
 	 * @param string &$rawName The raw name of the selector
 	 * @return bool Whether the selector was successfully recognised
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected function parseSelector( $selector, &$type, &$rawName ) {
 		$firstChar = substr( $selector, 0, 1 );
@@ -366,7 +370,7 @@ class HtmlFormatter {
 			$type = 'TAG';
 			$rawName = $selector;
 		} else {
-			throw new \Exception( __METHOD__ . "(): unrecognized selector '$selector'" );
+			throw new Exception( __METHOD__ . "(): unrecognized selector '$selector'" );
 		}
 
 		return true;
