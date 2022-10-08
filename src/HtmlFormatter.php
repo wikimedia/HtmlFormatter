@@ -105,13 +105,17 @@ class HtmlFormatter {
 			\libxml_use_internal_errors( true );
 			$loader = false;
 			if ( self::DISABLE_LOADER ) {
+				// @codeCoverageIgnoreStart
 				$loader = \libxml_disable_entity_loader();
+				// @codeCoverageIgnoreEnd
 			}
 			$this->doc = new DOMDocument();
 			$this->doc->strictErrorChecking = false;
 			$this->doc->loadHTML( $html );
 			if ( self::DISABLE_LOADER ) {
+				// @codeCoverageIgnoreStart
 				\libxml_disable_entity_loader( $loader );
+				// @codeCoverageIgnoreEnd
 			}
 			\libxml_use_internal_errors( false );
 			$this->doc->encoding = 'UTF-8';
