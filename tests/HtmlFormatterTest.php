@@ -31,7 +31,7 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 		foreach ( $removedElements as $removedElement ) {
 			$removed[] = self::normalize( $formatter->getText( $removedElement ) );
 		}
-		$expectedRemoved = array_map( 'self::normalize', $expectedRemoved );
+		$expectedRemoved = array_map( [ self::class, 'normalize' ], $expectedRemoved );
 
 		$this->assertEquals( self::normalize( $expectedText ), self::normalize( $html ) );
 		$this->assertEquals( asort( $expectedRemoved ), asort( $removed ) );
