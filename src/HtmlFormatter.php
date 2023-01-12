@@ -77,7 +77,7 @@ class HtmlFormatter {
 	 * @return string
 	 */
 	public static function wrapHTML( $html ) {
-		return '<!doctype html><html><head></head><body>' . $html . '</body></html>';
+		return '<!doctype html><html><head><meta charset="UTF-8"/></head><body>' . $html . '</body></html>';
 	}
 
 	/**
@@ -94,9 +94,12 @@ class HtmlFormatter {
 	 */
 	public function getDoc() {
 		if ( !$this->doc ) {
-			// DOMDocument::loadHTML apparently isn't very good with encodings, so
-			// convert input to ASCII by encoding everything above 128 as entities.
-			$html = \mb_convert_encoding( $this->html, 'HTML-ENTITIES', 'UTF-8' );
+			$html = $this->html;
+			if ( !str_starts_with( $html, '<!doctype html>' ) ) {
+				// DOMDocument::loadHTML defaults to ASCII for partial html
+				// Parse as full html with encoding
+				$html = self::wrapHTML( $html );
+			}
 
 			// Workaround for bug that caused spaces before references
 			// to disappear during processing: https://phabricator.wikimedia.org/T55086
@@ -118,7 +121,6 @@ class HtmlFormatter {
 				// @codeCoverageIgnoreEnd
 			}
 			\libxml_use_internal_errors( false );
-			$this->doc->encoding = 'UTF-8';
 		}
 		return $this->doc;
 	}
@@ -276,28 +278,6 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * libxml in its usual pointlessness converts many chars to entities - this function
-	 * perfoms a reverse conversion
-	 * @param string $html
-	 * @return string
-	 */
-	private function fixLibXML( $html ) {
-		// We don't include rules like '&#34;' => '&amp;quot;' because entities had already been
-		// normalized by libxml. Using this function with input not sanitized by libxml is UNSAFE!
-		$replacements = [
-			'&quot;' => '&amp;quot;',
-			'&amp;' => '&amp;amp;',
-			'&lt;' => '&amp;lt;',
-			'&gt;' => '&amp;gt;',
-		];
-		$html = strtr( $html, $replacements );
-
-		// Just in case the conversion in getDoc() above used named
-		// entities that aren't known to html_entity_decode().
-		return \mb_convert_encoding( $html, 'UTF-8', 'HTML-ENTITIES' );
-	}
-
-	/**
 	 * Performs final transformations and returns resulting HTML.  Note that if you want to call this
 	 * both without an element and with an element you should call it without an element first.  If you
 	 * specify the $element in the method it'll change the underlying dom and you won't be able to get
@@ -311,21 +291,10 @@ class HtmlFormatter {
 		if ( $this->doc ) {
 			if ( $element !== null && !( $element instanceof DOMElement ) ) {
 				$element = $this->doc->getElementById( $element );
+			} else {
+				$element = $this->doc->getElementsByTagName( 'body' )->item( 0 );
 			}
-			if ( $element ) {
-				$body = $this->doc->getElementsByTagName( 'body' )->item( 0 );
-				$nodesArray = [];
-				foreach ( $body->childNodes as $node ) {
-					$nodesArray[] = $node;
-				}
-				foreach ( $nodesArray as $nodeArray ) {
-					$body->removeChild( $nodeArray );
-				}
-				$body->appendChild( $element );
-			}
-			$html = $this->doc->saveHTML();
-
-			$html = $this->fixLibXml( $html );
+			$html = $this->doc->saveHTML( $element );
 			if ( PHP_EOL === "\r\n" ) {
 				// Cleanup for CRLF mis-processing of unknown origin on Windows.
 				$html = str_replace( '&#13;', '', $html );
