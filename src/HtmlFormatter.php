@@ -243,6 +243,7 @@ class HtmlFormatter {
 		}
 		$removed = \array_merge( $removed, $this->removeElements( $domElemsToRemove ) );
 
+		$return = [];
 		// Tags with CSS Classes
 		foreach ( $removals['TAG_CLASS'] as $classToRemove ) {
 			$parts = explode( '.', $classToRemove );
@@ -250,10 +251,10 @@ class HtmlFormatter {
 			$elements = $xpath->query(
 				'//' . $parts[0] . '[@class="' . $parts[1] . '"]'
 			);
-			$removed = array_merge( $removed, $this->removeElements( $elements ) );
+			$return[] = $this->removeElements( $elements );
 		}
 
-		return $removed;
+		return array_merge( array_merge( ...$return ), $removed );
 	}
 
 	/**
