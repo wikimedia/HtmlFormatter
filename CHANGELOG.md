@@ -1,8 +1,22 @@
 # Changelog
 
+## 4.0.0
+
+The library now requires PHP 7.4 or later.
+
+Fixed:
+* HTML is parsed as whole document to avoid encoding issues.
+
+Changed:
+* Return values added to functions.
+* Types added to function parameters.
+
+Removed:
+* PHP 7.2 and 7.3 are no longer supported.
+
 ## 3.0.1
 
-Fixed
+Fixed:
 * Made comment stripping independent of tag flattening.
 
 ## 3.0.0
