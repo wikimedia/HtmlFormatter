@@ -25,29 +25,30 @@ namespace HtmlFormatter;
 
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use Exception;
 
 class HtmlFormatter {
 	/**
-	 * @var DOMDocument
+	 * @var ?DOMDocument
 	 */
-	private $doc;
+	private ?DOMDocument $doc = null;
 
 	/**
 	 * @var string
 	 */
-	private $html;
+	private string $html;
 
 	/**
 	 * @var string[]
 	 */
-	private $itemsToRemove = [];
+	private array $itemsToRemove = [];
 
 	/**
 	 * @var string[]
 	 */
-	private $elementsToFlatten = [];
+	private array $elementsToFlatten = [];
 
 	/**
 	 * Whether a libxml_disable_entity_loader() call is needed
@@ -57,17 +58,17 @@ class HtmlFormatter {
 	/**
 	 * @var bool
 	 */
-	protected $removeMedia = false;
+	protected bool $removeMedia = false;
 
 	/**
 	 * @var bool
 	 */
-	protected $removeComments = false;
+	protected bool $removeComments = false;
 
 	/**
 	 * @param string $html Text to process
 	 */
-	public function __construct( $html ) {
+	public function __construct( string $html ) {
 		$this->html = $html;
 	}
 
@@ -76,7 +77,7 @@ class HtmlFormatter {
 	 * @param string $html HTML to wrap
 	 * @return string
 	 */
-	public static function wrapHTML( $html ) {
+	public static function wrapHTML( string $html ): string {
 		return '<!doctype html><html><head><meta charset="UTF-8"/></head><body>' . $html . '</body></html>';
 	}
 
@@ -85,14 +86,14 @@ class HtmlFormatter {
 	 * @param string $html HTML to process
 	 * @return string Processed HTML
 	 */
-	protected function onHtmlReady( $html ) {
+	protected function onHtmlReady( string $html ): string {
 		return $html;
 	}
 
 	/**
 	 * @return DOMDocument DOM to manipulate
 	 */
-	public function getDoc() {
+	public function getDoc(): DOMDocument {
 		if ( !$this->doc ) {
 			$html = $this->html;
 			if ( !str_starts_with( $html, '<!doctype html>' ) ) {
@@ -129,7 +130,7 @@ class HtmlFormatter {
 	 * Sets whether comments should be removed from output
 	 * @param bool $flag Whether to remove or not
 	 */
-	public function setRemoveComments( $flag = true ) {
+	public function setRemoveComments( bool $flag = true ): void {
 		$this->removeComments = $flag;
 	}
 
@@ -137,7 +138,7 @@ class HtmlFormatter {
 	 * Sets whether images/videos/sounds should be removed from output
 	 * @param bool $flag Whether to remove or not
 	 */
-	public function setRemoveMedia( $flag = true ) {
+	public function setRemoveMedia( bool $flag = true ): void {
 		$this->removeMedia = $flag;
 	}
 
@@ -152,27 +153,27 @@ class HtmlFormatter {
 	 *
 	 * @param string[]|string $selectors Selector(s) of stuff to remove
 	 */
-	public function remove( $selectors ) {
+	public function remove( $selectors ): void {
 		$this->itemsToRemove = array_merge( $this->itemsToRemove, (array)$selectors );
 	}
 
 	/**
 	 * Adds one or more element name to the list to flatten (remove tag, but not its content)
-	 * Can accept undelimited regexes
+	 * Can accept non-delimited regexes
 	 *
 	 * Note this interface may fail in surprising unexpected ways due to usage of regexes,
 	 * so should not be relied on for HTML markup security measures.
 	 *
 	 * @param string[]|string $elements Name(s) of tag(s) to flatten
 	 */
-	public function flatten( $elements ) {
+	public function flatten( $elements ): void {
 		$this->elementsToFlatten = array_merge( $this->elementsToFlatten, (array)$elements );
 	}
 
 	/**
 	 * Instructs the formatter to flatten all tags, and remove comments
 	 */
-	public function flattenAllTags() {
+	public function flattenAllTags(): void {
 		$this->flatten( '[?!]?[a-z0-9]+' );
 		$this->setRemoveComments( true );
 	}
@@ -182,7 +183,7 @@ class HtmlFormatter {
 	 * extracted with the getText method.
 	 * @return DOMElement[] Array of removed DOMElements
 	 */
-	public function filterContent() {
+	public function filterContent(): array {
 		$removals = $this->parseItemsToRemove();
 
 		// Bail out early if nothing to do
@@ -257,12 +258,12 @@ class HtmlFormatter {
 
 	/**
 	 * Removes a list of elements from DOMDocument
-	 * @param DOMElement[]|\DOMNodeList $elements
+	 * @param DOMElement[]|DOMNodeList $elements
 	 * @return DOMElement[] Array of removed elements
 	 */
-	private function removeElements( $elements ) {
+	private function removeElements( $elements ): array {
 		$list = $elements;
-		if ( $elements instanceof \DOMNodeList ) {
+		if ( $elements instanceof DOMNodeList ) {
 			$list = [];
 			foreach ( $elements as $element ) {
 				$list[] = $element;
@@ -287,7 +288,7 @@ class HtmlFormatter {
 	 *   false to get it from the whole tree
 	 * @return string Processed HTML
 	 */
-	public function getText( $element = null ) {
+	public function getText( $element = null ): string {
 		if ( $this->doc ) {
 			if ( $element !== null && !( $element instanceof DOMElement ) ) {
 				$element = $this->doc->getElementById( $element );
@@ -328,7 +329,7 @@ class HtmlFormatter {
 	 * @return bool Whether the selector was successfully recognised
 	 * @throws Exception
 	 */
-	protected function parseSelector( $selector, &$type, &$rawName ) {
+	protected function parseSelector( string $selector, string &$type, string &$rawName ): bool {
 		$firstChar = substr( $selector, 0, 1 );
 		if ( $firstChar === '.' ) {
 			$type = 'CLASS';
@@ -354,7 +355,7 @@ class HtmlFormatter {
 	 * processing by filterContent()
 	 * @return array
 	 */
-	protected function parseItemsToRemove() {
+	protected function parseItemsToRemove(): array {
 		$removals = [
 			'ID' => [],
 			'TAG' => [],

@@ -2,13 +2,15 @@
 
 namespace HtmlFormatter\Test;
 
+use Generator;
 use HtmlFormatter\HtmlFormatter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group HtmlFormatter
  * @covers \HtmlFormatter\HtmlFormatter
  */
-class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
+class HtmlFormatterTest extends TestCase {
 
 	/**
 	 * @dataProvider provideHtmlData
@@ -17,9 +19,9 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 	 * @param array $expectedRemoved
 	 * @param callable|bool $callback
 	 */
-	public function testTransform( $input, $expectedText,
-		$expectedRemoved = [], $callback = false
-	) {
+	public function testTransform( string $input, string $expectedText,
+		array $expectedRemoved = [], $callback = false
+	): void {
 		$input = self::normalize( $input );
 		$formatter = new HtmlFormatter( HtmlFormatter::wrapHTML( $input ) );
 		if ( $callback ) {
@@ -37,7 +39,7 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( asort( $expectedRemoved ), asort( $removed ) );
 	}
 
-	public function testInvalidSelectorsThrow() {
+	public function testInvalidSelectorsThrow(): void {
 		$f = new HtmlFormatter( '' );
 		$f->remove( 'foo[bar]' );
 		$this->expectException( \Exception::class );
@@ -45,13 +47,10 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	private static function normalize( $s ) {
-		return str_replace( "\n", '',
-			// "yay" to Windows!
-			str_replace( "\r", '', $s )
-		);
+		return str_replace( [ "\r", "\n" ], '', $s );
 	}
 
-	public static function provideHtmlData() {
+	public static function provideHtmlData(): Generator {
 		$removeImages = static function ( HtmlFormatter $f ) {
 			$f->setRemoveMedia();
 		};
@@ -140,7 +139,7 @@ class HtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * Verifies that HtmlFormatter does not needlessly parse HTML
 	 */
-	public function testQuickProcessing() {
+	public function testQuickProcessing(): void {
 		$f = $this->getMockBuilder( HtmlFormatter::class )
 			->onlyMethods( [ 'getDoc' ] )
 			->setConstructorArgs( [ 'foo' ] )
