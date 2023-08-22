@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.2
+
+Fixed:
+* ReturnTypeWillChange attribute added to more overridden functions to ease migration.
+
 ## 4.0.1
 
 Fixed:

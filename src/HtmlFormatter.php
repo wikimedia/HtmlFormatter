@@ -86,6 +86,7 @@ class HtmlFormatter {
 	 * @param string $html HTML to process
 	 * @return string Processed HTML
 	 */
+	#[\ReturnTypeWillChange]
 	protected function onHtmlReady( string $html ): string {
 		return $html;
 	}
@@ -93,6 +94,7 @@ class HtmlFormatter {
 	/**
 	 * @return DOMDocument DOM to manipulate
 	 */
+	#[\ReturnTypeWillChange]
 	public function getDoc(): DOMDocument {
 		if ( !$this->doc ) {
 			$html = $this->html;
@@ -290,6 +292,7 @@ class HtmlFormatter {
 	 *   false to get it from the whole tree
 	 * @return string Processed HTML
 	 */
+	#[\ReturnTypeWillChange]
 	public function getText( $element = null ): string {
 		if ( $this->doc ) {
 			if ( $element !== null && !( $element instanceof DOMElement ) ) {
@@ -357,6 +360,7 @@ class HtmlFormatter {
 	 * processing by filterContent()
 	 * @return array
 	 */
+	#[\ReturnTypeWillChange]
 	protected function parseItemsToRemove(): array {
 		$removals = [
 			'ID' => [],
