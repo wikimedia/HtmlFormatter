@@ -183,6 +183,7 @@ class HtmlFormatter {
 	 * extracted with the getText method.
 	 * @return DOMElement[] Array of removed DOMElements
 	 */
+	#[\ReturnTypeWillChange]
 	public function filterContent(): array {
 		$removals = $this->parseItemsToRemove();
 

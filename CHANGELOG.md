@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.1
+
+Fixed:
+* ReturnTypeWillChange attribute added to overridden functions to ease migration.
+
 ## 4.0.0
 
 The library now requires PHP 7.4 or later.
