@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.3
+
+Fixed:
+* Fixed a regression in HtmlFormatter::getText() when passed an element
+
 ## 4.0.2
 
 Fixed:
