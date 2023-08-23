@@ -149,4 +149,72 @@ class HtmlFormatterTest extends TestCase {
 		/** @var HtmlFormatter $f */
 		$f->filterContent();
 	}
+
+	private const EXCLUDED_ELEMENTS = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ];
+	private const AUX_ELEMENTS = [ 'table', ];
+
+	/**
+	 * Ported and simplified from MediaWiki core's WikitextStructureTest::testTexts(); wikitext swapped for HTML.
+	 * This test doesn't test for tag stripping that Mediawiki does.
+	 */
+	public function testT344811(): void {
+		$text = <<<END
+Opening text is opening.
+<h2> Then comes header </h2>
+Then we got more text
+<h3> And more headers </h3>
+<table class="wikitable">
+<tbody>
+<tr><th>Header table</th></tr>
+<tr><td>row in table</td></tr>
+<tr><td>another row in table</td></tr>
+</tbody>
+</table>
+END;
+
+		$matches = [];
+		preg_match( '/<h[123456]>/', $text, $matches, PREG_OFFSET_CAPTURE );
+
+		$formatter = new HtmlFormatter( substr( $text, 0, $matches[ 0 ][ 1 ] ) );
+		$formatter->remove( self::EXCLUDED_ELEMENTS );
+		$formatter->remove( self::AUX_ELEMENTS );
+		$formatter->filterContent();
+		$this->assertEquals( "Opening text is opening.",  trim( $formatter->getText() ) );
+
+		$formatter = new HtmlFormatter( $text );
+		$formatter->remove( self::EXCLUDED_ELEMENTS );
+		$formatter->filterContent();
+		$formatter->remove( self::AUX_ELEMENTS );
+		$auxiliaryElements = $formatter->filterContent();
+
+		$this->assertEquals( "Opening text is opening.
+
+Then we got more text",
+			trim( $formatter->getText() ) );
+
+		$auxText = [];
+		foreach ( $auxiliaryElements as $auxiliaryElement ) {
+			$auxText[] =
+				trim( self::replaceNewline( $formatter->getText( $auxiliaryElement ) ) );
+		}
+
+		$expectedTable = <<<END
+<table class="wikitable">
+<tbody>
+<tr><th>Header table</th></tr>
+<tr><td>row in table</td></tr>
+<tr><td>another row in table</td></tr>
+</tbody>
+</table>
+END;
+
+		$this->assertEquals(
+			[ self::replaceNewline( $expectedTable ) ],
+			$auxText
+		);
+	}
+
+	private static function replaceNewline( string $input ): string {
+		return str_replace( [ "\n", "\r" ], "", $input );
+	}
 }
