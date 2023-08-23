@@ -297,7 +297,8 @@ class HtmlFormatter {
 		if ( $this->doc ) {
 			if ( $element !== null && !( $element instanceof DOMElement ) ) {
 				$element = $this->doc->getElementById( $element );
-			} else {
+			}
+			if ( !$element ) {
 				$element = $this->doc->getElementsByTagName( 'body' )->item( 0 );
 			}
 			$html = $this->doc->saveHTML( $element );
