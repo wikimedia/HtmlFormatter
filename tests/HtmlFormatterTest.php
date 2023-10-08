@@ -128,6 +128,14 @@ class HtmlFormatterTest extends TestCase {
 			'Foo<sup id="cite_ref-1" class="reference"><a href="#cite_note-1">[1]</a></sup>'
 				. ' <a href="/wiki/Bar" title="Bar" class="mw-redirect">Bar</a>',
 		];
+		yield 'T55086 and T348402, space before tags' => [
+			'Foo <a href="/wiki/Bar" title="Bar" class="mw-redirect">Bar</a>',
+			'Foo <a href="/wiki/Bar" title="Bar" class="mw-redirect">Bar</a>',
+		];
+		yield 'T55086 and T348402, space after tags' => [
+			'Foo<sup id="cite_ref-1" class="reference"><a href="#cite_note-1">[1]</a></sup> Bar',
+			'Foo<sup id="cite_ref-1" class="reference"><a href="#cite_note-1">[1]</a></sup> Bar',
+		];
 		yield 'removeComments only' => [
 			'Foo<!--bar--><i>baz</i>',
 			'Foo<i>baz</i>',

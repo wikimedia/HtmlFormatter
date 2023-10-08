@@ -104,9 +104,9 @@ class HtmlFormatter {
 				$html = self::wrapHTML( $html );
 			}
 
-			// Workaround for bug that caused spaces before references
-			// to disappear during processing: https://phabricator.wikimedia.org/T55086
-			$html = str_replace( ' <', '&#32;<', $html );
+			// Workaround for bug that caused spaces after references
+			// to disappear during processing (T55086, T348402)
+			$html = str_replace( '> <', '>&#32;<', $html );
 
 			\libxml_use_internal_errors( true );
 			$loader = false;
