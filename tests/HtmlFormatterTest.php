@@ -222,6 +222,53 @@ END;
 		);
 	}
 
+	public static function removeBeforeIncludingProvider() {
+		return [
+			'no match, unchanged' => [ 'example', 'no match', 'example' ],
+			'simple match' => [ 'example text content', 'text', ' content' ],
+			'matches last occurance' => [ 'example text text content', 'text', ' content' ],
+		];
+	}
+
+	/**
+	 * @dataProvider removeBeforeIncludingProvider
+	 */
+	public function testRemoveBeforeIncluding( $haystack, $needle, $expect ) {
+		$this->assertEquals( $expect, HtmlFormatter::removeBeforeIncluding( $haystack, $needle ) );
+	}
+
+	public static function removeAfterIncludingProvider() {
+		return [
+			'no match, unchanged' => [ 'example', 'no match', 'example' ],
+			'simple match' => [ 'example text content', 'text', 'example ' ],
+			'matches first occurance' => [ 'example text text content', 'text', 'example ' ],
+		];
+	}
+
+	/**
+	 * @dataProvider removeAfterIncludingProvider
+	 */
+	public function testRemoveAfterIncluding( $haystack, $needle, $expect ) {
+		$this->assertEquals( $expect, HtmlFormatter::removeAfterIncluding( $haystack, $needle ) );
+	}
+
+	public function removeBetweenIncludingProvider() {
+		return [
+			'no match, unchanged' => [ 'example', 'no match', 'no match', 'example' ],
+			'simple match' => [ 'example <!-- text --> content', '<!--', '-->', 'example  content' ],
+			'nested open' => [ 'example [ascii [text] content', '[', ']', 'example  content' ],
+			'nested close' => [ 'example [ascii] text] content', '[', ']', 'example  text] content' ],
+			'multiple matches' => [ 'example [ascii] text [content]', '[', ']', 'example  text ' ],
+		];
+	}
+
+	/**
+	 * @dataProvider removeBetweenIncludingProvider
+	 */
+	public function testRemoveBetweenIncluding( $haystack, $open, $close, $expect ) {
+		$this->assertEquals( $expect, HtmlFormatter::removeBetweenIncluding( $haystack, $open, $close ) );
+	}
+
 	private static function replaceNewline( string $input ): string {
 		return str_replace( [ "\n", "\r" ], "", $input );
 	}
