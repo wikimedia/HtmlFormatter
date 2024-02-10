@@ -4,6 +4,7 @@ namespace HtmlFormatter\Test;
 
 use Generator;
 use HtmlFormatter\HtmlFormatter;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,7 +43,7 @@ class HtmlFormatterTest extends TestCase {
 	public function testInvalidSelectorsThrow(): void {
 		$f = new HtmlFormatter( '' );
 		$f->remove( 'foo[bar]' );
-		$this->expectException( \Exception::class );
+		$this->expectException( InvalidArgumentException::class );
 		$f->filterContent();
 	}
 

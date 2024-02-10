@@ -27,7 +27,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use DOMXPath;
-use Exception;
+use InvalidArgumentException;
 
 class HtmlFormatter {
 	/**
@@ -384,7 +384,6 @@ class HtmlFormatter {
 	 * @param string &$type The type of selector (ID, CLASS, TAG_CLASS, or TAG)
 	 * @param string &$rawName The raw name of the selector
 	 * @return bool Whether the selector was successfully recognised
-	 * @throws Exception
 	 */
 	protected function parseSelector( string $selector, string &$type, string &$rawName ): bool {
 		$firstChar = substr( $selector, 0, 1 );
@@ -401,7 +400,7 @@ class HtmlFormatter {
 			$type = 'TAG';
 			$rawName = $selector;
 		} else {
-			throw new Exception( __METHOD__ . "(): unrecognized selector '$selector'" );
+			throw new InvalidArgumentException( __METHOD__ . "(): unrecognized selector '$selector'" );
 		}
 
 		return true;
