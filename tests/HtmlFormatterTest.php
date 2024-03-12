@@ -164,7 +164,7 @@ class HtmlFormatterTest extends TestCase {
 
 	/**
 	 * Ported and simplified from MediaWiki core's WikitextStructureTest::testTexts(); wikitext swapped for HTML.
-	 * This test doesn't test for tag stripping that Mediawiki does.
+	 * This test doesn't test for tag stripping that MediaWiki does.
 	 */
 	public function testT344811(): void {
 		$text = <<<END
