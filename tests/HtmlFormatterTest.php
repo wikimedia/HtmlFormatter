@@ -188,7 +188,7 @@ END;
 		$formatter->remove( self::EXCLUDED_ELEMENTS );
 		$formatter->remove( self::AUX_ELEMENTS );
 		$formatter->filterContent();
-		$this->assertEquals( "Opening text is opening.",  trim( $formatter->getText() ) );
+		$this->assertEquals( "Opening text is opening.", trim( $formatter->getText() ) );
 
 		$formatter = new HtmlFormatter( $text );
 		$formatter->remove( self::EXCLUDED_ELEMENTS );
