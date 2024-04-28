@@ -20,8 +20,11 @@ class HtmlFormatterTest extends TestCase {
 	 * @param array $expectedRemoved
 	 * @param callable|bool $callback
 	 */
-	public function testTransform( string $input, string $expectedText,
-		array $expectedRemoved = [], $callback = false
+	public function testTransform(
+		string $input,
+		string $expectedText,
+		array $expectedRemoved = [],
+		$callback = false
 	): void {
 		$input = self::normalize( $input );
 		$formatter = new HtmlFormatter( HtmlFormatter::wrapHTML( $input ) );

@@ -283,12 +283,12 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * Performs final transformations and returns resulting HTML.  Note that if you want to call this
-	 * both without an element and with an element you should call it without an element first.  If you
-	 * specify the $element in the method it'll change the underlying dom and you won't be able to get
+	 * Performs final transformations and returns resulting HTML. Note that if you want to call this
+	 * both without an element and with an element, you should call it without an element first. If you
+	 * specify the $element in the method, it'll change the underlying dom and you won't be able to get
 	 * it back.
 	 *
-	 * @param DOMElement|string|null $element ID of element to get HTML from or
+	 * @param DOMElement|string|null $element ID of the element to get HTML from or
 	 *   false to get it from the whole tree
 	 * @return string Processed HTML
 	 */
@@ -326,7 +326,7 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * Removes everything from beginning of string to last occurance of $needle, including $needle.
+	 * Removes everything from beginning of string to last occurrence of $needle, including $needle.
 	 *
 	 * Equivalent to the regex /^.*?<body>/s when $needle = '<body>'
 	 */
@@ -339,7 +339,7 @@ class HtmlFormatter {
 	}
 
 	/**
-	 * Removes everything from the first occurance of $needle to the end of the string, including $needle
+	 * Removes everything from the first occurrence of $needle to the end of the string, including $needle
 	 *
 	 * Equivalent to the regex /<\/body>.*$/s when $needle = '</body>'
 	 */
