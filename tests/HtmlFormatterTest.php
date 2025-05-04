@@ -256,7 +256,7 @@ END;
 		$this->assertEquals( $expect, HtmlFormatter::removeAfterIncluding( $haystack, $needle ) );
 	}
 
-	public function removeBetweenIncludingProvider() {
+	public static function removeBetweenIncludingProvider() {
 		return [
 			'no match, unchanged' => [ 'example', 'no match', 'no match', 'example' ],
 			'simple match' => [ 'example <!-- text --> content', '<!--', '-->', 'example  content' ],
